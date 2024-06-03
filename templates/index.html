@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>导演滴</title>
+
+
+    <style>
+        #app {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+        }
+        .input-group {
+          margin-bottom: 10px; /* 每个输入组间增加一些间距 */
+        }
+
+        .video-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; /* 水平排列，并且在行两端对齐 */
+}
+
+.video-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* 将子项水平居中 */
+  gap: 20px; /* 设置子项之间的间距 */
+}
+
+.video-wrapper {
+  flex-basis: calc(33.33% - 20px); /* 设置每个视频容器的基础大小（减去间距） */
+  margin-bottom: 20px; /* 底部间距 */
+}
+
+        
+
+        label {
+    margin-right: 10px;
+    background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: silver; /* 将文字颜色设置为银白色 */
+    display: inline; /* 或其他适合的显示模式，确保渐变背景仅覆盖文字部分 */
+}
+
+        
+
+                label, input, button {
+            font-size: 18px; /* 增大字体大小 */
+            margin: 5px; /* 增加间距 */
+        }
+        input, button {
+            padding: 10px; /* 增加填充，使元素更大 */
+            border-radius: 5px; /* 添加圆角 */
+        }
+        button {
+    cursor: pointer; /* 鼠标悬停时显示指针 */
+    background-color: goldenrod; /* 设置按钮背景颜色为金黄色 */
+}
+
+
+
+
+                body {
+            margin: 0;
+            padding: 0;
+            background-color: #000; /* 背景色设置为黑色 */
+            background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                            radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+                            radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
+                            radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
+            background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px; /* 控制星星的尺寸 */
+            background-position: 0 0, 100px 100px, 300px 300px, 450px 450px; /* 控制星星的位置 */
+        }
+
+
+        /* 加载对话框的样式 */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8); /* 半透明白色背景 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* 确保加载对话框在最顶层 */
+}
+
+/* 加载动画的样式 */
+.loader {
+  border: 8px solid #f3f3f3; /* 灰色 */
+  border-top: 8px solid #3498db; /* 蓝色 */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite; /* 旋转动画 */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+      </style>
+    <!-- 引入 Vue 3 的 CDN 链接 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <!-- 根组件 -->
+    <div id="app">
+        <div class="input-group">
+          <label for="scene">场景:</label>
+          <input type="text" id="scene" v-model="formData.scene" placeholder="高楼大厦">
+        </div>
+        <div class="input-group">
+          <label for="charactor">角色:</label>
+          <input type="text" id="charactor" v-model="formData.charactor" placeholder="魔法女郎">
+        </div>
+        <div class="input-group">
+          <label for="motion">动作:</label>
+          <input type="text" id="motion" v-model="formData.motion" placeholder="抽着香烟">
+        </div>
+        <div class="input-group">
+          <label for="view">视角:</label>
+          <input type="text" id="view" v-model="formData.view" placeholder="脸部特写，视角由远到近">
+        </div>
+        <div class="input-group">
+          <label for="atmosphere">氛围:</label>
+          <input type="text" id="0" v-model="formData.atmosphere" placeholder="紧张刺激">
+        </div>
+
+        <div v-if="isLoading" class="loading-overlay">
+            <div class="loader"></div>
+          </div>
+        <button @click="submitData" :disabled="isLoading">点我找构图和参考</button>
+
+        <img :src="image_url" alt="Image"  style="width: 512px; height: 512px;">
+
+        
+
+
+        <div class="video-container">
+            <div class="video-wrapper" v-for="(embedCode, index) in embedCodes" :key="index">
+              <iframe width="560" height="315" :src="embedCode" frameborder="0" allowfullscreen></iframe>
+            </div>
+          </div>
+          
+      </div>
+
+    <script>
+        // 创建 Vue 应用
+        const { createApp } = Vue;
+
+        createApp({
+            // 应用启动时的数据
+            data() {
+                return {
+                formData: {
+                    scene: '',
+                    charactor: '',
+                    motion: '',
+                    view: '',
+                    atmosphere: ''
+                },
+
+                image_url:"https://clutchpoints.com/_next/image?url=https%3A%2F%2Fwp.clutchpoints.com%2Fwp-content%2Fuploads%2F2023%2F09%2FAFK-Journey-Spiritual-Sequel-to-AFK-Arena-Revealed.jpg&w=3840&q=75",
+
+                embedCodes: [
+      ],
+                isLoading: false
+                }
+            },
+            // 定义方法
+            methods: {
+                reverseMessage() {
+                    this.message = this.message.split('').reverse().join('')
+                },
+
+
+                    async submitData() {
+                        // 设置加载状态为true，显示加载对话框
+                        this.isLoading = true;
+
+                        try {
+                            const formData = new FormData();
+                            formData.append('scene', this.formData.scene);
+                            formData.append('charactor', this.formData.charactor);
+                            formData.append('motion', this.formData.motion);
+                            formData.append('view', this.formData.view);
+                            formData.append('atmosphere', this.formData.atmosphere);
+
+                            const response = await fetch('http://10.3.20.128:1017/biubiu', {
+                            method: 'POST',
+                            body: formData
+                            });
+                            const data = await response.json();
+                            console.log('Success:', data);
+
+                            this.image_url = data.image_url;
+                            this.embedCodes = data.links;
+                            
+                        } catch (error) {
+                            console.error('Error:', error);
+                            alert('Error submitting data');
+                        } finally {
+                            // 请求完成后，设置加载状态为false，隐藏加载对话框
+                            this.isLoading = false;
+                        }
+                        }
+            }
+        }).mount('#app'); // 将 Vue 应用挂载到 #app 元素上
+    </script>
+</body>
+</html>

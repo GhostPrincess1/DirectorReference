@@ -1,0 +1,34 @@
+场景：现代大楼楼顶
+人物：一个帅气的风衣男
+动作：子弹射向风衣男，风衣男躲避。镜头先是常速，然后是慢镜头
+视角：镜头跟在子弹后面，在风衣男躲子弹时，镜头开始环绕风衣男
+气氛：冷酷，紧张，冷色调
+
+
+<scene>
+  <location setting="modern building rooftop" />
+  <character description="a handsome man in a trench coat" />
+  <action sequence="bullet shot towards the man, the man dodges">
+    <phase speed="normal" description="bullet is shot towards the man" />
+    <phase speed="slow-motion" description="man dodges the bullet">
+      <cameraMovement description="camera follows the bullet, then starts circling around the man as he dodges" />
+    </phase>
+  </action>
+  <atmosphere mood="cool, tense" colorTone="cold" />
+</scene>
+
+{"clip1":"","clip2":"",...}
+
+
+
+
+
+给你一篇文档，文档内容放在了<text>标签内。你仔细阅读文档内容。你有很强的好奇心，你要根据文档内容提出你自己的疑问。你的思维很开阔，你可以从任意角度出发来提出你的问题。务必注意，提出的问题要与文档内容有关，你要以第三人称来提问。你的输出要有固定格式，用中文提问，你仅需要直接提出一个问题，不需要提到文档内容，不要夹杂废话，就是最直接的疑问句，可以提出复杂的组合式的问题，字数不超过200个中文。<text>摘要
+游戏本质上是一种艺术与科技融合的产物，技术的应用与发展在发展在很大程度上决定着游戏的制作和效率，本文将详细概述新生态UGC AI游戏生成系统设计与实现,将视频制作简单划分为三个阶段，实现comfyui与unity接口，unity主界面制作流程，ai场景及美工布局，重点分析AIGC对游戏产业与动画产业的革命性影响，快速模拟2d游戏的生成，虽在实践应用中有诸多局限，但在整体创作过程中，整体游戏框架的搭建及流程实现是本次创作实践核心目标。
+关键词：AIGC；comfyui；unity；游戏；
+1.引言
+AIGC领域已经推出了一系列强大的平台和产品，但我们始终致力于优化产品体验，以满足用户的多元化需求。在我们现有的产品体验中，用户反映工具使用门槛较高并且缺乏面向美术宣发的AI游戏生成工具。这些反馈让我们看到了市场的需求和改进的空间。
+为了解决这些问题，我们已经设计和实现了一个全新的面向UGC（User Generated Content）的AI游戏生成工具。这个工具旨在让用户以更低的门槛和更直观的方式生成符合个人风格和偏好的游戏。这不仅能增加用户参与度，使用户在游戏中体验到乐趣，更加让用户体验并参与游戏创作中，同时也可以促进用户与平台之间的交流和互动。我们相信，这款工具能让用户乐于分享自己的成果，从而帮助我们的产品在社交媒体上获得更广泛的传播。
+具体来说，这款工具包含了以下特点和功能：
+
+1. 用户友好的操作界面：我们精心设计了直观而易用的操作界面，即使对AI和游戏生成技术没有基础知识的用户也可以快速上手。</text>
